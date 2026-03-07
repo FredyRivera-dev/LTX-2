@@ -91,7 +91,10 @@ def load_image_conditioning(
     Loads an image from a path and preprocesses it for conditioning.
     Note: The image is resized to the nearest multiple of 2 for compatibility with video codecs.
     """
-    image = decode_image(image_path=image_path)
+    if isinstance(image_path, Image.Image):
+        image = decode_image_pil(image=image_path)
+    else:
+        image = decode_image(image_path=image_path)
     image = preprocess(image=image, crf=crf)
     image = torch.tensor(image, dtype=torch.float32, device=device)
     image = resize_and_center_crop(image, height, width)
@@ -117,6 +120,10 @@ def load_video_conditioning(
 
 def decode_image(image_path: str) -> np.ndarray:
     image = Image.open(image_path)
+    np_array = np.array(image)[..., :3]
+    return np_array
+
+def decode_image_pil(image: Image.Image) -> np.ndarray:
     np_array = np.array(image)[..., :3]
     return np_array
 

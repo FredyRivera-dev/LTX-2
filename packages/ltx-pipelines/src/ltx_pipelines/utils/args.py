@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, Union
+from PIL import Image
 
 from ltx_core.loader import LTXV_LORA_COMFY_RENAMING_MAP, LoraPathStrengthAndSDOps
 from ltx_core.quantization import QuantizationPolicy
@@ -15,7 +16,7 @@ from ltx_pipelines.utils.constants import (
 
 
 class ImageConditioningInput(NamedTuple):
-    path: str
+    path: Union[str, Image.Image]
     frame_idx: int
     strength: float
     crf: int = DEFAULT_IMAGE_CRF
